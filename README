@@ -17,4 +17,4 @@ Database spcific packages like psycopg2 might be necessary depending on the data
 
 DEMO
 The current version is always available at http://gtd.gedankenacker.de
-Authentication is currently possible against Twitter and Facebook, more providers will follow with the next velruse release.
+Authentication is currently possible against Twitter and Facebook, more providers will follow with the next velruse release. The author is actively using the demo setup, but future changes might require changes in the database layout, so if you plan on using this application let me know so I can take extra care when doing migrations.
