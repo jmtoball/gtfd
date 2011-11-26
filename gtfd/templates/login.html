@@ -1,0 +1,35 @@
+{%extends "base.html"%}
+{%block content%}	
+	<h2>{%if not g.user%}Sign in{%else%}Link additional accounts{%endif%}</h2>
+	{% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
+	<form action="{{VELRUSE_URL}}google/auth" method="post">
+		<input type="hidden" name="use_popup" value="false" />
+		<input type="hidden" name="end_point" value="" />
+		<input type="hidden" name="oauth_scope" value="https://www.google.com/analytics/feeds/" />
+		<input type="hidden" name="openid_identifier" value="google.com" />
+		<input type="submit" value="Sign in with Google" disabled='disabled'/>
+	</form>
+	<br/>
+	<form action="{{VELRUSE_URL}}facebook/auth" method="post">
+		<input type="hidden" name="end_point" value="{{url_for('login', _external=True)}}" />
+		<input type="hidden" name="scope" value="email" />
+		<input type="submit" value="Sign in with Facebook" />
+	</form>
+	<br/>
+	<form action="{{VELRUSE_URL}}twitter/auth" method="post">
+		<input type="hidden" name="end_point" value="{{url_for('login', _external=True)}}" />
+		<input type="submit" value="Sign in with Twitter"/>
+	</form>
+	<br/>
+	<form action="{{VELRUSE_URL}}yahoo/auth" method="post">
+		<input type="hidden" name="end_point" value="{{url_for('login', _external=True)}}" />
+		<input type="hidden" name="openid_identifier" value="yahoo.com" />
+		<input type="hidden" name="oauth" value="true" />
+		<input type="submit" value="Sign in with Yahoo" disabled='disabled'/>
+	</form>
+	<br/>
+	<form action="{{VELRUSE_URL}}live/auth" method="post">
+		<input type="hidden" name="end_point" value="{{url_for('login', _external=True)}}" />
+		<input type="submit" value="Sign in with Windows Live" disabled='disabled'/>
+	</form>
+{%endblock%}

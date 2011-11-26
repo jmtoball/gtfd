@@ -1,0 +1,30 @@
+<li class='task{%if task.done%} done{%endif%}'>
+	<div class='actions'>
+		<a href="/dotoggle/{{task.id}}/"><img src="{{STATIC_URL}}images/{%if not task.done%}un{%endif%}done.png" alt="(un)done"/></a>
+		<a href="/startoggle/{{task.id}}/"><img src="{{STATIC_URL}}images/{%if not task.important%}un{%endif%}important.png" alt="(un)important"/></a>
+		{%if task.duration_text()%}
+			<img src="{{STATIC_URL}}images/duration.png" title="{{task.duration_text()}}" alt="{{task.duration_text()}}"/>
+		{%else%}
+			<span class='spaceholder'></span>
+		{%endif%}
+		{%if task.due_text()%}
+			<img src="{{STATIC_URL}}images/due.png" title="{{task.due_text()}}" alt="{{task.due_text()}}"/>
+		{%else%}
+			<span class='spaceholder'></span>	
+		{%endif%}
+		{%if task.text%}
+			<a class='view'>
+				<img src="{{STATIC_URL}}images/view.png" title="view text" alt="view text"/>
+			</a>
+		{%else%}
+			<span class='spaceholder'></span>	
+		{%endif%}
+		<a href="/edit/{{task.id}}/"><img src="{{STATIC_URL}}images/edit.png" alt="edit"/></a>
+		<a href="/delete/{{task.id}}/"><img src="{{STATIC_URL}}images/delete.png" alt="delete"/></a>
+	</div>
+	<h3 title="{{task.title}}">{{task.title[:40]}}</h3>
+	{%for tag in task.get_tags()%}
+		<a class='tag' href='/tag/{{tag}}/'>{{tag}}</a>
+	{%endfor%}
+	<p>{{task.text|replace("\n", "<br/>")|safe}}</p>
+</li>

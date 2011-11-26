@@ -1,0 +1,66 @@
+{%extends "base.html"%}
+{%block content%}	
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+		//Done Table
+		var chart, data;
+		options = {width: 490, height: 200, isStacked: true, backgroundColor: "#eeeeee",
+                         fontSize: 12, chartArea: {left: 25, top: 5, width: "100%"}, legend: "in"};
+        data = new google.visualization.DataTable();
+		options['colors'] = ["#339933", "#993333"];
+        data.addColumn('string', 'date');
+        data.addColumn('number', 'done');
+        data.addColumn('number', 'todo');
+        data.addRows([
+			{%for day in todo_done_table%}
+          	["{{day['date'].month}}-{{day['date'].day}}", {{day['done']}}, {{day['todo']}}],
+			{%endfor%}
+        ]);
+        chart = new google.visualization.AreaChart(document.getElementById('todo_done'));
+		chart.draw(data, options);
+
+		//Done Ratio Table
+		options = {width: 490, height: 200, isStacked: true, backgroundColor: "#eeeeee",
+                         fontSize: 12, chartArea: {left: 25, top: 5, width: "100%"}, legend: "in"};
+        data = new google.visualization.DataTable();
+		options['colors'] = ["#339933", "#993333"];
+        data.addColumn('string', 'date');
+        data.addColumn('number', 'done %');
+        data.addColumn('number', 'todo %');
+        data.addRows([
+			{%for day in todo_ratio_table%}
+          	["{{day['date'].month}}-{{day['date'].day}}", {{day['done_ratio']}}, {{day['todo_ratio']}}],
+			{%endfor%}
+        ]);
+        chart = new google.visualization.AreaChart(document.getElementById('todo_done_ratio'));
+		chart.draw(data, options);
+
+		//Time Table
+        data = new google.visualization.DataTable();
+		options['colors'] = ["#339933", "#993333", "#336699", "#666666"];
+		options['isStacked'] = false;
+        data.addColumn('string', 'date');
+        data.addColumn('number', 'avg');
+        data.addRows([
+			{%for day in time_table%}
+          	["{{day['date'].month}}-{{day['date'].day}}", {{day['avg']}}],
+			{%endfor%}
+        ]);
+        chart = new google.visualization.LineChart(document.getElementById('times'));
+        chart.draw(data, options);
+      }
+    </script>
+
+	<h2>Stats</h2>
+	{%for stat in stats%}
+		{{stat}} {{stats[stat]}}<br/>
+	{%endfor%}
+	<h2>Todo and Done</h2>
+	<div id="todo_done"></div>
+	<div id="todo_done_ratio"></div>
+	<h2>Average Completion Time</h2>
+	<div id="times"></div>
+{%endblock%}

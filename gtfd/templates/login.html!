@@ -1,0 +1,51 @@
+{%extends "base.html"%}
+{%block content%}	
+	{%if task%}
+	<div class='howbout'>
+		<h2>How about?</h2>
+			How about getting '{{task.title}}' done, that has been waiting for {{task.waited_text()}}?<br/>
+			<br/>
+			<a href="/do/{{task.id}}/" id="yes">Yes, I'll do that now!</a>
+			<a href="/postpone/{{task.id}}/" id="no">No, bug me later!</a>
+	</div>
+	{%endif%}
+	<h2>Add Task</h2>
+		<form method="post" action="/{%if edit%}edit/{{edit.id}}{%else%}new{%endif%}/">
+			<input type="text" name="desc"{%if edit%} value="{{edit.desc}}"{%endif%}/><br/>
+			<textarea name="text">{%if edit%}{{edit.text}}{%endif%}</textarea>	
+			<input type="submit" value="Save"/>
+		</form>	
+	<h2>Tasks</h2>
+		{%for task in tasks%}
+		<div class='task{%if task.done%} done{%endif%}'>
+			<div class='actions'>
+				<a href="/do/{{task.id}}/"><img src="{{STATIC_URL}}images/{%if not task.done%}un{%endif%}done.png" alt="(un)done"/></a>
+				<a href="/startoggle/{{task.id}}/"><img src="{{STATIC_URL}}images/{%if not task.important%}un{%endif%}important.png" alt="(un)important"/></a>
+				{%if task.duration_text()%}
+					<img src="{{STATIC_URL}}images/duration.png" title="{{task.duration_text()}}" alt="{{task.duration_text()}}"/>
+				{%else%}
+					<span class='spaceholder'></span>
+				{%endif%}
+				{%if task.due_text()%}
+					<img src="{{STATIC_URL}}images/due.png" title="{{task.due_text()}}" alt="{{task.due_text()}}"/>
+				{%else%}
+					<span class='spaceholder'></span>	
+				{%endif%}
+				{%if task.text%}
+					<a class='view'>
+						<img src="{{STATIC_URL}}images/view.png" title="view text" alt="view text"/>
+					</a>
+				{%else%}
+					<span class='spaceholder'></span>	
+				{%endif%}
+				<a href="/edit/{{task.id}}/"><img src="{{STATIC_URL}}images/edit.png" alt="edit"/></a>
+				<a href="/delete/{{task.id}}/"><img src="{{STATIC_URL}}images/delete.png" alt="delete"/></a>
+			</div>
+			<h3>{{task.title}}</h3>
+			{%for tag in task.get_tags()%}
+				<a class='tag' href='/tag/{{tag}}/'>{{tag}}</a>
+			{%endfor%}
+			<p>{{task.text}}</p>
+		</div>
+		{%endfor%}
+{%endblock%}

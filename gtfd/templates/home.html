@@ -1,0 +1,38 @@
+{%extends "base.html"%}
+{%block content%}	
+	{%if task%}
+	<div class='howbout'>
+		<h2>How about?</h2>
+			How about getting '{{task.title}}' done?<br/>
+			It has been waiting for {{task.waited_text()}}?<br/>
+			{%if task.postponed_count > 0 %}
+			You postponed it {{task.postponed_count}} times already.
+			{%endif%}
+			<br/>
+			<a href="/dotoggle/{{task.id}}/" id="yes">Yes, I'll do that now!</a>
+			<a href="/postpone/{{task.id}}/" id="no">No, bug me later!</a>
+	</div>
+	{%endif%}
+	<h2>{%if not edit%}Add{%else%}Update{%endif%} Task</h2>
+		<form method="post" action="/{%if edit%}edit/{{edit.id}}{%else%}new{%endif%}/">
+			<input type="text" name="desc"{%if edit%} value="{{edit.desc}}"{%endif%}/><br/>
+			<textarea name="text">{%if edit%}{{edit.text}}{%endif%}</textarea>	
+			<input type="submit" value="Save"/>
+		</form>	
+	<h2 id="todo_toggle">Tasks todo</h2>
+	<ul id="tasks_todo">
+	{%for task in tasks%}
+		{%if not task.done%}
+			{%include "task.html" with context%}
+		{%endif%}
+	{%endfor%}
+	</ul>
+	<h2 id="done_toggle">Tasks done</h2>
+	<ul id="tasks_done">
+	{%for task in tasks%}
+		{%if task.done%}
+			{%include "task.html" with context%}
+		{%endif%}
+	{%endfor%}
+	</ul>
+{%endblock%}
