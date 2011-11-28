@@ -142,28 +142,6 @@ class Auth(Base):
 	__table_args__ = {"extend_existing": True}
 	id = Column(Integer, primary_key=True)
 	auth = Column(String(255))
-
-	def postpone(self):
-		self.postponed_count += 1
-		self.postponed_date = datetime.now()
-
-class User(Base):
-	__tablename__ = 'users'
-	__table_args__ = {"extend_existing": True}
-	id = Column(Integer, primary_key=True)
-	name = Column(String(60))
-	email = Column(String(200))
-	notify = Column(Boolean, default=False)
-
-	def __init__(self, name, email=""):
-		self.name = name
-		self.email = email
-
-class Auth(Base):
-	__tablename__ = 'auths'
-	__table_args__ = {"extend_existing": True}
-	id = Column(Integer, primary_key=True)
-	auth = Column(String(255))
 	user_id = Column(Integer, ForeignKey('users.id'))
 	user = relationship('User', backref=backref('auths', lazy='dynamic'))
 
