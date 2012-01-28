@@ -3,8 +3,6 @@ import sys
 sys.stdout = sys.stderr
 
 SITE_URL = "http://gtd.gedankenacker.de/"
-SITE_PATH = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(SITE_PATH)
 
 STATIC_URL = "http://static.gedankenacker.de/gtd/"
 STATIC_DIR = "/var/www/static/gtd/"
