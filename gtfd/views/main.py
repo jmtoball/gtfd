@@ -3,7 +3,7 @@ from flask import url_for, request, redirect, flash, session, g
 from gtfd.site import app
 from gtfd.lib import stats
 from gtfd.db import db_session, Task, User
-from gtfd.views.common import render
+from gtfd.views.common import render, safe_reload
 
 @app.route('/', methods=["POST", "GET"])
 @app.route('/tag/<tag>/', methods=["POST", "GET"])
@@ -36,7 +36,7 @@ def do(id):
 		flash("Task done - That was fucking awesome, you rock!")
 	db_session.merge(task)
 	db_session.commit()
-	return redirect(request.referrer)
+	return safe_reload(url_for("home"))
 
 @app.route('/postpone/<id>/')
 def postpone(id):
@@ -45,7 +45,7 @@ def postpone(id):
 	db_session.merge(task)
 	db_session.commit()
 	flash("Task postponed - You can't postpone forever!")
-	return redirect(url_for("home"))
+	return safe_reload(url_for("home"))
 
 @app.route('/delete/<id>/')
 def delete(id):
@@ -53,7 +53,7 @@ def delete(id):
 	db_session.delete(task)
 	db_session.commit()
 	flash("Task deleted - Failed to delete conscience")
-	return redirect(url_for("home"))
+	return safe_reload(url_for("home"))
 
 @app.route('/edit/<id>/', methods=["POST"])
 def edit(id):
@@ -65,7 +65,7 @@ def edit(id):
 	db_session.merge(task)
 	db_session.commit()
 	flash("Task updated - Succesfully made it more challenging!")
-	return redirect(url_for("home"))
+	return safe_reload(url_for("home"))
 
 @app.route('/startoggle/<id>/')
 def startoggle(id):
@@ -81,7 +81,7 @@ def startoggle(id):
 		flash("Task Starred - Finally recognized it as important")
 	else:
 		flash("Task Unstarred - now marked as supposedly unimportant")
-	return redirect(url_for("home"))
+	return safe_reload(url_for("home"))
 
 @app.route('/new/', methods=["POST"])
 def new():
@@ -91,7 +91,7 @@ def new():
 	db_session.add(task)
 	db_session.commit()
 	flash("Task added - Yet more to do, awesome!")
-	return redirect(url_for("home"))
+	return safe_reload(url_for("home"))
 
 @app.route('/statistics/')
 def statistics():
