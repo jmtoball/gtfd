@@ -7,7 +7,7 @@ def render(template, **kwargs):
 	return render_template(template, **kwargs)
 
 def safe_reload(fallback):
-    for target in (request.values.get('next'), request.referrer):
+    for target in (request.values.get('next'), request.form.get('next'), request.referrer):
         if target and conf.SITE_URL in target:
             return redirect(target)
     return redirect(fallback)
