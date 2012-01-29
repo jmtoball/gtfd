@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, flash
 from gtfd import conf
 from gtfd.site import app
 
@@ -8,6 +8,7 @@ def render(template, **kwargs):
 
 def safe_reload(fallback):
     for target in (request.values.get('next'), request.form.get('next'), request.referrer):
+        flash(target)
         if target and conf.SITE_URL in target:
             return redirect(target)
     return redirect(fallback)
