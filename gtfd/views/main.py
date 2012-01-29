@@ -36,7 +36,7 @@ def do(id):
 		flash("Task done - That was fucking awesome, you rock!")
 	db_session.merge(task)
 	db_session.commit()
-	return redirect(url_for("home"))
+	return redirect(request.referrer)
 
 @app.route('/postpone/<id>/')
 def postpone(id):
