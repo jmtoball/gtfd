@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, redirect
 from gtfd import conf
 from gtfd.site import app
 
