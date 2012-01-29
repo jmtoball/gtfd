@@ -29,31 +29,34 @@ def home(action=None, tag=None, edit_id=None):
 @app.route('/dotoggle/<id>/')
 def do(id):
 	task = Task.query.filter(Task.id==id).first()
-	if task.done:
-		task.uncomplete()
-		flash("Task undone - Wait, how is this even possible?!")
-	else:
-		task.complete()
-		flash("Task done - That was fucking awesome, you rock!")
-	db_session.merge(task)
-	db_session.commit()
+    if task:
+        if task.done:
+            task.uncomplete()
+            flash("Task undone - Wait, how is this even possible?!")
+        else:
+            task.complete()
+            flash("Task done - That was fucking awesome, you rock!")
+        db_session.merge(task)
+        db_session.commit()
 	return safe_reload(url_for("home"))
 
 @app.route('/postpone/<id>/')
 def postpone(id):
 	task = Task.query.filter(Task.id==id).first()
-	task.postpone()
-	db_session.merge(task)
-	db_session.commit()
-	flash("Task postponed - You can't postpone forever!")
+    if task:
+        task.postpone()
+        db_session.merge(task)
+        db_session.commit()
+        flash("Task postponed - You can't postpone forever!")
 	return safe_reload(url_for("home"))
 
 @app.route('/delete/<id>/')
 def delete(id):
 	task = Task.query.filter(Task.id==id).first()
-	db_session.delete(task)
-	db_session.commit()
-	flash("Task deleted - Failed to delete conscience")
+    if task:
+        db_session.delete(task)
+        db_session.commit()
+        flash("Task deleted - Failed to delete conscience")
 	return safe_reload(url_for("home"))
 
 @app.route('/edit/<id>/', methods=["POST"])
@@ -71,17 +74,18 @@ def edit(id):
 @app.route('/startoggle/<id>/')
 def startoggle(id):
 	task = Task.query.filter(Task.id==id).first()
-	if task.desc.startswith("!"):
-		task.desc = task.desc[1:]
-	else:
-		task.desc = "!"+task.desc
-	task.update()
-	db_session.merge(task)
-	db_session.commit()
-	if task.desc.startswith("!"):
-		flash("Task Starred - Finally recognized it as important")
-	else:
-		flash("Task Unstarred - now marked as supposedly unimportant")
+    if task:
+        if task.desc.startswith("!"):
+            task.desc = task.desc[1:]
+        else:
+            task.desc = "!"+task.desc
+        task.update()
+        db_session.merge(task)
+        db_session.commit()
+        if task.desc.startswith("!"):
+            flash("Task Starred - Finally recognized it as important")
+        else:
+            flash("Task Unstarred - now marked as supposedly unimportant")
 	return safe_reload(url_for("home"))
 
 @app.route('/new/', methods=["POST"])
