@@ -19,7 +19,7 @@
 		{%else%}
 			<span class='spaceholder'></span>	
 		{%endif%}
-		<a href="/edit/{{task.id}}/"><img src="{{STATIC_URL}}images/edit.png" alt="edit"/></a>
+		<a href="/edit/{{task.id}}/{{tag or ''}}/"><img src="{{STATIC_URL}}images/edit.png" alt="edit"/></a>
 		<a href="/delete/{{task.id}}/"><img src="{{STATIC_URL}}images/delete.png" alt="delete"/></a>
 	</div>
 	<h3 title="{{task.title}}">{{task.title[:40]}}</h3>

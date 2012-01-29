@@ -17,6 +17,7 @@
     <form method="post" action="/{%if edit%}edit/{{edit.id}}{%else%}new{%endif%}/">
         <input type="text" name="desc"{%if edit%} value="{{edit.desc}}"{%endif%}/><br/>
         <textarea name="text">{%if edit%}{{edit.text}}{%endif%}</textarea>	
+        <input type="hidden" name="next" value="{{next or ''}}"/>
         <input type="submit" value="Save"/>
     </form>	
 	<h2 id="todo_toggle">Tasks todo</h2>

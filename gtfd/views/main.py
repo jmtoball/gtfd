@@ -8,6 +8,7 @@ from gtfd.views.common import render, safe_reload
 @app.route('/', methods=["POST", "GET"])
 @app.route('/tag/<tag>/', methods=["POST", "GET"])
 @app.route('/edit/<edit_id>/')
+@app.route('/edit/<edit_id>/<tag>/')
 def home(action=None, tag=None, edit_id=None):
 	if not g.user:
 		return redirect(url_for("login"))
@@ -23,7 +24,7 @@ def home(action=None, tag=None, edit_id=None):
 	if edit_id:
 		edit = Task.query.filter(Task.id==edit_id).first()
 	task = task.first()
-	return render(template, tasks=tasks, task=task, edit=edit)
+	return render(template, tag=tag, tasks=tasks, task=task, edit=edit, next=request.referrer)
 
 @app.route('/dotoggle/<id>/')
 def do(id):
