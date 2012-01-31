@@ -14,12 +14,12 @@ def home(action=None, tag=None, edit_id=None):
         return redirect(url_for("login"))
     edit = None
     template = "home.html"
-    tag = tag.lower()
     task_qry = g.user.tasks
     tasks = task_qry
     #FIXME: WTF, this must be refactored soon
     task = task_qry.order_by(Task.postponed_date, Task.created).filter(Task.done==False).filter(Task.postponed_date<=datetime.today()-timedelta(2))
     if tag:
+        tag = tag.lower()
         tasks = tasks.filter(Task.tags.like('%#'+tag+'%'))
         task = task.filter(Task.tags.like('%#'+tag+'%'))
     if edit_id:
