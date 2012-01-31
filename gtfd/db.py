@@ -56,7 +56,7 @@ class Task(Base):
         self.update()
 
     def get_tags(self):
-        return sorted(re.findall("#(\w+)", self.desc))    
+        return sorted(map(str.lower, re.findall("#(\w+)", self.desc)))
     
     def desc_text(self):
         noopts = re.sub("([@~#][^@~#]+)", "", self.desc).strip()
