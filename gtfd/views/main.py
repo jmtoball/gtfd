@@ -14,6 +14,7 @@ def home(action=None, tag=None, edit_id=None):
         return redirect(url_for("login"))
     edit = None
     template = "home.html"
+    tag = tag.lower()
     task_qry = g.user.tasks
     tasks = task_qry
     #FIXME: WTF, this must be refactored soon
