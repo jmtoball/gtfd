@@ -96,7 +96,8 @@ textarea {
     padding: 20px 35px;
 }
 .ribbon a{
-    background: #fff;
+    background: #ccc;
+    padding: 2px 4px;
     color: #000;
 }
 .flashes .error{
