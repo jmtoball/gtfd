@@ -20,6 +20,7 @@ def home(action=None, tag=None, edit_id=None):
     task = task_qry.order_by(Task.postponed_date, Task.created).filter(Task.done==False).filter(Task.postponed_date<=datetime.today()-timedelta(2))
     if tag:
         tag = tag.lower()
+        flash("Filtering by tag "+tag+". <a href='"+url_for('home')+"'>Remove Filter</a>")
         tasks = tasks.filter(Task.tags.like('%#'+tag+'%'))
         task = task.filter(Task.tags.like('%#'+tag+'%'))
     if edit_id:
