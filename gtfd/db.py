@@ -1,7 +1,7 @@
-from sqlalchemy import create_engine
+from sqlalchemy import Column, Integer, String
+from sqlalchemy import create_engine, Text, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey
 from datetime import datetime, timedelta
 from conf import DB_URL
 from werkzeug import secure_filename
@@ -18,6 +18,7 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 Base = declarative_base()
 Base.query = db_session.query_property()
 
+
 class Content(Base):
     __tablename__ = "contents"
     __table_args__ = {"extend_existing": True}
@@ -25,9 +26,11 @@ class Content(Base):
     page = Column(String(50))
     html = Column(Text)
     created = Column(DateTime, default=datetime.now())
+
     def __init__(self, page=None, html=None):
         self.page = page
-        self.html = html 
+        self.html = html
+
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -38,7 +41,7 @@ class Task(Base):
     desc = Column(Text)
     created = Column(DateTime, default=datetime.now())
     postponed_date = Column(DateTime, default=datetime.now())
-    postponed_count = Column(Integer, default=0)    
+    postponed_count = Column(Integer, default=0)
     important = Column(Boolean, default=False)
     done = Column(Boolean, default=False)
     done_date = Column(DateTime)
@@ -51,13 +54,13 @@ class Task(Base):
 
     def __init__(self, user_id, text="", desc=""):
         self.user_id = user_id
-        self.text = text 
+        self.text = text
         self.desc = desc
         self.update()
 
     def get_tags(self):
         return sorted(map(unicode.lower, re.findall("#(\w+)", self.desc)))
-    
+
     def desc_text(self):
         noopts = re.sub("([@~#][^@~#]+)", "", self.desc).strip()
         if noopts.startswith("!"):
@@ -69,10 +72,10 @@ class Task(Base):
         if dur:
             dur = dur.group(1).strip()
             absolute = pdt.Calendar(cal).parse(dur)
-            relative = datetime(*absolute[0][:6])-datetime.now()
-            return relative.days*24*3600+relative.seconds
+            relative = datetime(*absolute[0][:6]) - datetime.now()
+            return relative.days * 24 * 3600 + relative.seconds
         return 0
-    
+
     def duration_text(self):
         if self.duration <= 0:
             return None
@@ -90,10 +93,10 @@ class Task(Base):
     def due_text(self):
         if not self.due_date:
             return None
-        delta = self.due_date-datetime.now()
+        delta = self.due_date - datetime.now()
         if delta > timedelta(1):
-            return "on "+str(self.due_date)
-        return "in "+fuzzy_delta(delta)
+            return "on " + str(self.due_date)
+        return "in " + fuzzy_delta(delta)
 
     def is_important(self):
         return self.desc.startswith("!")
@@ -105,14 +108,14 @@ class Task(Base):
         self.tags = '#'.join(self.get_tags())
         self.important = self.is_important()
         if len(self.tags.strip()) > 0:
-            self.tags = "#"+self.tags
-    
+            self.tags = "#" + self.tags
+
     def completion_time(self):
-        return datetime.now()-self.created
+        return datetime.now() - self.created
 
     def waited_text(self):
         return fuzzy_delta(self.completion_time())
-    
+
     def complete(self):
         self.done = True
         self.done_date = datetime.now()
@@ -124,6 +127,7 @@ class Task(Base):
     def postpone(self):
         self.postponed_count += 1
         self.postponed_date = datetime.now()
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -137,6 +141,7 @@ class User(Base):
         self.name = name
         self.email = email
 
+
 class Auth(Base):
     __tablename__ = 'auths'
     __table_args__ = {"extend_existing": True}
@@ -148,6 +153,7 @@ class Auth(Base):
     def __init__(self, auth, uid):
         self.auth = auth
         self.user_id = uid
+
 
 def init_db():
     Base.metadata.create_all(bind=engine)
