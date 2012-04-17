@@ -61,7 +61,7 @@ def login():
                     flash('Login failed: '+data['reason']['description'], 'error')
                     return redirect(url_for("home"))
                 prf = data['profile']
-                
+
                 auth = Auth.query.filter_by(auth=prf['identifier']).first()
                 if auth is not None:
                     loginExistingUser(auth.user)
