@@ -22,9 +22,9 @@ def loginExistingUser(user):
 
 def createUser(prf):
     email = ""
-    if prf.has_key('verifiedEmail'):
+    if "verifiedEmail" in prf:
         email = prf['verifiedEmail']
-    elif prf.has_key('emails') and len(prf['emails']):
+    elif "emails" in prf and len(prf['emails']):
         email = prf['emails'][0]
     name=prf['displayName']
     if type(name).__name__ == 'list':
@@ -52,7 +52,7 @@ def connectNewUser(prf):
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        if request.form.has_key("token"):
+        if "token" in request.form:
             token = request.form["token"]
             resp = urllib2.urlopen(VELRUSE_URL+"auth_info/?token="+token).read()
             if resp:
