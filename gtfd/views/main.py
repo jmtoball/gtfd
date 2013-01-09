@@ -17,7 +17,7 @@ def home(action=None, tag=None, edit_id=None):
     task_qry = g.user.tasks
     tasks = task_qry
     #FIXME: WTF, this must be refactored soon
-    task = task_qry.order_by(Task.postponed_date, Task.created).filter(Task.done==False).filter(Task.postponed_date<=datetime.today()-timedelta(2))
+    task = task_qry.order_by(Task.created).filter(Task.done==False).filter(Task.postponed_date<=datetime.today()-timedelta(2))
     if tag:
         tag = tag.lower()
         flash("Filtering by tag "+tag+". <a href='"+url_for('home')+"'>Remove Filter</a>")
