@@ -54,15 +54,13 @@ def login():
     if request.method == 'POST':
         if "token" in request.form:
             token = request.form["token"]
-            resp = urllib2.urlopen(VELRUSE_URL+"auth_info/?token="+token).read()
+            resp = urllib2.urlopen(VELRUSE_URL+"auth_info/?format=json&token="+token).read()
             if resp:
                 data = simplejson.loads(resp)
-                if data['status'] == "fail":
-                    flash('Login failed: '+data['reason']['description'], 'error')
-                    return redirect(url_for("home"))
+                flash(str(data), 'info')
                 prf = data['profile']
-
-                auth = Auth.query.filter_by(auth=prf['identifier']).first()
+                auth_string = prf['accounts'][0]['domain']+":"+prf['accounts'][0]['userid']
+                auth = Auth.query.filter_by(auth=auth_string).first()
                 if auth is not None:
                     loginExistingUser(auth.user)
                     return redirect(url_for("home"))
